@@ -162,22 +162,22 @@ target_stand = df_regresion_stand.pop('Yearly Amount Spent')
 X_train, X_test, y_train, y_test = train_test_split(df_regresion,target,test_size=0.3,random_state=42)
 X_train_s, X_test_s, y_train_s, y_test_s = train_test_split(df_regresion_stand,target_stand,test_size=0.3,random_state=42)
 
-# lr = LinearRegression(fit_intercept=False)
-# lr.fit(X_train,y_train)
+lr = LinearRegression(fit_intercept=False)
+lr.fit(X_train,y_train)
 
-# print('Sklearn function MAE',mean_absolute_error(y_test,lr.predict(X_test)))
+print('Sklearn function MAE',mean_absolute_error(y_test,lr.predict(X_test)))
 
-# coef,b = linear_regression(X_train,y_train,0.00001,error_diff=0.1,initial_guess=np.array([[11.9],[34.7],[-14.1],[60.5]]))
+coef,b = linear_regression(X_train,y_train,0.00001,error_diff=0.1,initial_guess=np.array([[11.9],[34.7],[-14.1],[60.5]]))
 
-# y_pred = X_test@coef[-1] + b[-1]
-# y_pred = pd.DataFrame(y_pred)
+y_pred = X_test@coef[-1] + b[-1]
+y_pred = pd.DataFrame(y_pred)
 
-# print('My function MAE',mae(y_test,y_pred))
+print('My function MAE',mae(y_test,y_pred))
 
-# plt.ioff() 
-# plt.figure()
-# sns.regplot(x=y_pred, y=y_test, data=df, color='blue')
-# plt.show()
+plt.ioff() 
+plt.figure()
+sns.regplot(x=y_pred, y=y_test, data=df, color='blue')
+plt.show()
 
 
 ### Data Analysis

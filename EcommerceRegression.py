@@ -175,8 +175,10 @@ y_pred = pd.DataFrame(y_pred)
 print('My function MAE',mae(y_test,y_pred))
 
 plt.ioff() 
+
 plt.figure()
-sns.regplot(x=y_pred, y=y_test, data=df, color='blue')
+plt.bar(['Sklearn','My_Implementation'], [mean_absolute_error(y_test,lr.predict(X_test)),mae(y_test,y_pred)])
+plt.title('MAE')
 plt.show()
 
 
@@ -185,21 +187,20 @@ plt.show()
 max_spent = df['Yearly Amount Spent'].max()
 min_spent = df['Yearly Amount Spent'].min()
 
-corr_matrix = df[features_num].corr()
+corr_matrix = df_regresion.corr()
 
-columns = df[features_num].columns
+columns = df_regresion.columns
 
-mean = df[features_num] - np.mean(df[features_num] , axis=0)
+mean = df_regresion - np.mean(df_regresion , axis=0)
 
 cov_matrix = (mean.T@mean)/(np.shape(mean)[0])
 
-tab_1,data_pca,f_1 = pca(df[features_num],corr_matrix,columns)
-tab_2,data_fa,f_2 = fa(df[features_num],corr_matrix,columns)
-print('tabla:','\n',tab_2)
-print(f_2)
+tab_1,data_pca,f_1 = pca(df_regresion,corr_matrix,columns)
+tab_2,data_fa,f_2 = fa(df_regresion,corr_matrix,columns)
+print('tabla:','\n',tab_1)
+print(f_1)
 
-print('Describe')
-print(df.describe())
+
 plt.figure(figsize=(8, 6))
 
 ax = sns.heatmap(corr_matrix, annot=True, cmap='coolwarm',
@@ -211,25 +212,20 @@ ax = sns.heatmap(corr_matrix, annot=True, cmap='coolwarm',
             ) # Make cells square-shaped)
 ax.tick_params(axis='both', which='major', labelsize=8)  # Ajusta el tamaño de las etiquetas de los ejes
 
-plt.xticks(rotation=45, ha='right') 
-plt.tight_layout()
-plt.show()
 
 df['Max_Spent'] = 0
 df.loc[df['Yearly Amount Spent'] >= (2*((max_spent - min_spent) / 4)+min_spent), 'Max_Spent'] = 1
 
-sns.scatterplot(x=data_fa['F_1'], y=data_fa['F_2'], hue=df['Max_Spent'])
-
+plt.xticks(rotation=45, ha='right') 
+plt.tight_layout()
+plt.show()
+sns.scatterplot(x=data_pca['PC_1'], y=data_pca['PC_2'],hue=df['Max_Spent'])
+plt.show()
 #Attempt to improve the regression model with another features
-
-df_regresion.loc[:, 'PC_1'] = data_pca['PC_1'].values
-df_regresion.loc[:, 'PC_2'] = data_pca['PC_2'].values
-
-print(df_regresion.head(5))
 
 X_train_new, X_test_new, y_train_new, y_test_new = train_test_split(df_regresion,target,test_size=0.3,random_state=42)
 
-lr_n = LinearRegression(fit_intercept=False)
+lr_n = LinearRegression(fit_intercept=True)
 lr_n.fit(X_train_new,y_train_new)
 
 print('Sklearn function MAE',mean_absolute_error(y_test_new,lr_n.predict(X_test_new)))

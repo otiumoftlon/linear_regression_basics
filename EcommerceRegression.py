@@ -114,10 +114,11 @@ def linear_regression(X, y, step, initial_guess=None, error_diff=20,max_iter=100
         errors.append(error)
 
         # Update the plot with new error
-        plt.plot(errors, color='blue')
-        plt.xlim(0, len(errors))  # Adjust x-limits
-        plt.ylim(0, max(errors) * 1.1)  # Adjust y-limits
-        plt.pause(0.01)  # Pause to update the plot
+        if iterations % 10 == 0:
+            plt.plot(errors, color='blue')
+            plt.xlim(0, len(errors))  # Adjust x-limits
+            plt.ylim(0, max(errors) * 1.1)  # Adjust y-limits
+            plt.pause(0.01)  # Pause to update the plot
 
         # Convergence check: stop if the change in error is less than the threshold
         if abs(prev_error - error) < error_diff:
